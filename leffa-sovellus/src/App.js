@@ -8,7 +8,7 @@ import './App.css';
 import './styles.css';
 
 const Welcome = () => {
-  return <p>Testi</p>;
+  return <p>Leffa</p>;
 };
 
 const App = () => {
