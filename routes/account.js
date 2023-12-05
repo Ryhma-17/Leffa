@@ -1,27 +1,26 @@
 const router = require('express').Router();
-
 const multer = require('multer');
 const upload = multer({dest: 'upload/'});
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-//const {addUser, getUsers, checkUser} = require('../postgre/user');
+const {addAccount, getAccounts} = require('../postgre/account');
 
 /**
- * User root get mapping
+ * Account root get mapping
  */
 router.get('/', async (req, res) => {
 
     try {
-        res.json(await getUsers());    
+        res.json(await getAccounts());    
     } catch (error) {
         res.status(500).json({error: error.message});
     }
 });
 
 
-//User root post mapping. Supports urlencoded and multer
+//Account root post mapping. Supports urlencoded and multer
 router.post('/register', upload.none() , async (req,res) => {
     const fname = req.body.fname;
     const lname = req.body.lname;
@@ -31,7 +30,7 @@ router.post('/register', upload.none() , async (req,res) => {
     pw = await bcrypt.hash(pw, 10);
 
     try {
-        await addUser(fname,lname,uname,pw);
+        await addAccount(fname,lname,uname,pw);
         res.end();
     } catch (error) {
         console.log(error);
@@ -44,7 +43,7 @@ router.post('/login', upload.none(), async (req,res) => {
     const uname = req.body.uname;
     let pw = req.body.pw;
 
-    const pwHash = await checkUser(uname);
+    const pwHash = await checkAccount(uname);
 
     if(pwHash){
         const isCorrect = await bcrypt.compare(pw, pwHash);
