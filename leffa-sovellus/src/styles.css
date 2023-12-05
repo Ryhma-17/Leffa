@@ -1,3 +1,7 @@
+.header {
+  color: #fff;
+} 
+
 
 .navbar {
     background-color: #333; 
@@ -24,19 +28,21 @@
   }
 
   .signup-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .signup-form {
+    background-image: url('./../assets/background.PNG');
+    background-size: cover;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
   }
   
+  .signup-form-container {
+    background-color: rgba(14, 13, 13, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+  }
+
   label {
     margin-bottom: 8px;
   }
@@ -61,6 +67,7 @@
 
   .movie-list {
     text-align: center;
+    background-color: #000000;
   }
   
   .movie-cards {
