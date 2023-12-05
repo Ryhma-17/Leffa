@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './../styles.css';
 
 const MovieList = () => {
   // hookit elokuvien ja hakusanatulosten tilan hallintaan
@@ -58,7 +59,7 @@ const MovieList = () => {
 
   return (
     <div className="movie-list">
-      <h1>Movies</h1>
+      <h1 className="header"> Movies</h1>
       <input
         type="text"
         placeholder="Search for movies..."

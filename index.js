@@ -1,8 +1,10 @@
 require('dotenv').config();
 const express = require('express');
-const userRoute = require('./routes/account');
-//const movieRoute = require('./routes/movie');
 const cors = require('cors');
+const pgPool = require('./postgre/connection');
+
+const accountRoute = require('./routes/account');
+//const movieRoute = require('./routes/movie');
 
 const app = express();
 
@@ -13,7 +15,7 @@ app.use(cors());
 app.use(express.static('public'));
 
 //Setting routes
-app.use('/account', userRoute );
+app.use('/account', accountRoute );
 //app.use('/movies', movieRoute);
 
 //Start server
@@ -27,7 +29,7 @@ app.listen(PORT, function(){
  */
 app.get('/', (req, res) => {
 
-   
+res.send('Hello World!');   
     
 });
 
