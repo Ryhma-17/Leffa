@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const userRoute = require('./routes/user');
+const userRoute = require('./routes/account');
 //const movieRoute = require('./routes/movie');
 const cors = require('cors');
 
@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.static('public'));
 
 //Setting routes
-app.use('/user', userRoute );
+app.use('/account', userRoute );
 //app.use('/movies', movieRoute);
 
 //Start server
