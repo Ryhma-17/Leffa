@@ -20,18 +20,19 @@ router.get('/', async (req, res) => {
 
 // Account root post mapping. Supports urlencoded and multer
 router.post('/register', upload.none(), async (req, res) => {
-  const { username, email, pw } = req.body;
+  const { username, email, password } = req.body;
 
-  // Check if the username is already taken
-  const existingAccount = await checkAccount(uname);
-  if (existingAccount) {
-    return res.status(400).json({ error: 'Username already exists' });
-  }
+  // Tarkistetaan onko käyttäjänimi olemassa
+const existingAccount = await checkAccount(username);
+if (existingAccount) {
+  return res.status(400).json({ error: 'Username already exists' });
+}
 
-  // Hash the password
-  const hashedPassword = await bcrypt.hash(pw, 10);
+  // Hashataan salasana bcryptillä
+  console.log('Password: ', password);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Add the new account to the database
+  // Lisätään uusi käyttäjä tietokantaan
   try {
     await addAccount(username, email, hashedPassword);
     res.status(201).json({ message: 'Account created successfully' });
@@ -42,8 +43,29 @@ router.post('/register', upload.none(), async (req, res) => {
 });
 
 router.post('/login', upload.none(), async (req, res) => {
-  // Your login route logic
+  const { username, password } = req.body;
+
+  // Tarkistetaan onko käyttäjänimi olemassa
+  const existingAccount = await checkAccount(username);
+  if (!existingAccount) {
+    return res.status(401).json({ message: 'Username not found' });
+  }
+
+  // Käytetään bcrypt.compare vertaamaan salasanoja
+  const correctPassword = await bcrypt.compare(password.trim(), existingAccount.password.trim());
+
+  if (!correctPassword) {
+    return res.status(401).json({ error: 'Password is incorrect' });
+  }
+
+  // Jos molemmat käyttäjänimi ja salasana täsmäävät, luodaan JWT-token
+  const token = jwt.sign({ username: existingAccount.username }, 'your_secret_key', { expiresIn: '1h' });
+
+  // Lähetetään tokeni clientille
+  res.status(200).json({ message: 'Login successful', token });
 });
+
+
 
 router.get('/private', async (req, res) => {
   // Your private route logic
