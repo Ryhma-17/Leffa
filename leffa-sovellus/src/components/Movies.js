@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './../styles.css';
 
-const MovieList = () => {
-  // hookit elokuvien ja hakusanatulosten tilan hallintaan
+const MovieList = ({ onMovieSelect }) => {
   const [events, setEvents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // haetaan elokuvat Finnkinon API:sta komponentin latautuessa
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -18,11 +16,9 @@ const MovieList = () => {
           },
         });
 
-        // Parsitaan XML
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(response.data, 'text/xml');
 
-        // Tapahtumien lista
         const eventsArray = Array.from(xmlDoc.querySelectorAll('Event')).map((event) => {
           return {
             id: event.querySelector('ID')?.textContent || '',
@@ -36,26 +32,28 @@ const MovieList = () => {
           };
         });
 
-
         setEvents(eventsArray);
       } catch (error) {
-        console.error('Virhe datan hakemisessa:', error);
+        console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
   }, []);
 
-
-  const handleSearch = (e) => {       // funktio hakukentän tekstin muutoksille
+  const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
 
+  const handleMovieClick = (movie) => {
+    if (onMovieSelect) {
+      onMovieSelect(movie);
+    }
+  };
 
-  const filteredEvents = events.filter((event) =>                   // Tapahtumien suodatus haun perusteella
+  const filteredEvents = events.filter((event) =>
     event.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
 
   return (
     <div className="movie-list">
@@ -68,10 +66,11 @@ const MovieList = () => {
       />
       <div className="movie-cards">
         {filteredEvents.map((event) => (
-          <div key={event.id} className="movie-card">
+          <div key={event.id} className="movie-card" onClick={() => handleMovieClick(event)}>
+            {/* Pass the event/movie to the handleMovieClick function */}
             <img
               src={event.images.mediumPortrait}
-              alt={`Juliste elokuvalle ${event.title}`}
+              alt={`Poster for the movie ${event.title}`}
               className="movie-image"
             />
             <div className="movie-details">

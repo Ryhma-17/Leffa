@@ -6,6 +6,7 @@ import Movies from './components/Movies';
 import SignUp from './components/SignUp';
 import './App.css';
 import './styles.css';
+import MyPage from './components/MyPage';
 
 const Welcome = () => {
   return <p>Leffa</p>;
@@ -28,6 +29,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/movies" element={<Movies />} />
+          <Route path="/mypage" element={<MyPage signedIn={signedIn} setSignedIn={setSignedIn}/>} />
           <Route path="/signup" element={<SignUp signedIn={signedIn} setSignedIn={setSignedIn} />} />
         </Routes>
       </div>
