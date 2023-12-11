@@ -4,6 +4,7 @@ const cors = require('cors');
 const pgPool = require('./postgre/connection');
 
 const accountRoute = require('./routes/account');
+const reviewsRoute = require('./routes/reviews');
 //const movieRoute = require('./routes/movie');
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.static('public'));
 
 //Setting routes
 app.use('/account', accountRoute );
+app.use('/reviews', reviewsRoute);
 //app.use('/movies', movieRoute);
 
 //Start server
