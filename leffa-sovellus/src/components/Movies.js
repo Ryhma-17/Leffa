@@ -1,48 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './../styles.css';
 
 const MovieList = ({ onMovieSelect }) => {
-  const [events, setEvents] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const fetchMovies = useCallback(async () => {
+    try {
+      const apiKey = '2fec1e16d4aa6b56f3458f21d6bb19d1';
+      const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+        params: {
+          api_key: apiKey,
+          sort_by: 'popularity.desc',
+          query: searchQuery,
+          page: currentPage,
+        },
+      });
+
+      const moviesArray = response.data.results.map((movie) => ({
+        id: movie.id.toString(),
+        title: movie.title,
+        images: {
+          smallPortrait: `https://image.tmdb.org/t/p/w185${movie.poster_path}`,
+          mediumPortrait: `https://image.tmdb.org/t/p/w300${movie.poster_path}`,
+          largePortrait: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+        },
+      }));
+
+      // Filter out duplicates based on movie ID
+      setMovies((prevMovies) => {
+        const uniqueMovies = [...new Map([...prevMovies, ...moviesArray].map(movie => [movie.id, movie])).values()];
+        return uniqueMovies;
+      });
+
+      setTotalPages(response.data.total_pages);
+    } catch (error) {
+      console.error('Error fetching data from TMDb:', error);
+    }
+  }, [currentPage]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://www.finnkino.fi/xml/Events/', {
-          params: {
-            includePictures: true,
-            includeGallery: true,
-          },
-        });
-
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(response.data, 'text/xml');
-
-        const eventsArray = Array.from(xmlDoc.querySelectorAll('Event')).map((event) => {
-          return {
-            id: event.querySelector('ID')?.textContent || '',
-            title: event.querySelector('Title')?.textContent || '',
-            images: {
-              smallPortrait: event.querySelector('EventSmallImagePortrait')?.textContent || '',
-              mediumPortrait: event.querySelector('EventMediumImagePortrait')?.textContent || '',
-              largePortrait: event.querySelector('EventLargeImagePortrait')?.textContent || '',
-              smallLandscape: event.querySelector('EventSmallImageLandscape')?.textContent || '',
-            },
-          };
-        });
-
-        setEvents(eventsArray);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    fetchMovies();
+  }, [fetchMovies]);
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+    // Reset current page when the search query changes
+    setCurrentPage(1);
   };
 
   const handleMovieClick = (movie) => {
@@ -51,13 +58,16 @@ const MovieList = ({ onMovieSelect }) => {
     }
   };
 
-  const filteredEvents = events.filter((event) =>
-    event.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const loadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const filteredMovies = movies
+    .filter((movie) => movie.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <div className="movie-list">
-      <h1 className="header"> Movies</h1>
+      <h1 className="header">Movies</h1>
       <input
         type="text"
         placeholder="Search for movies..."
@@ -65,20 +75,24 @@ const MovieList = ({ onMovieSelect }) => {
         onChange={handleSearch}
       />
       <div className="movie-cards">
-        {filteredEvents.map((event) => (
-          <div key={event.id} className="movie-card" onClick={() => handleMovieClick(event)}>
-            {/* Pass the event/movie to the handleMovieClick function */}
+        {filteredMovies.map((movie) => (
+          <div key={movie.id} className="movie-card" onClick={() => handleMovieClick(movie)}>
             <img
-              src={event.images.mediumPortrait}
-              alt={`Poster for the movie ${event.title}`}
+              src={movie.images.mediumPortrait}
+              alt={`Poster for the movie ${movie.title}`}
               className="movie-image"
             />
             <div className="movie-details">
-              <strong>{event.title}</strong>
+              <strong>{movie.title}</strong>
             </div>
           </div>
         ))}
       </div>
+      {currentPage < totalPages && (
+        <button onClick={loadMore} disabled={currentPage >= totalPages}>
+          Load More
+        </button>
+      )}
     </div>
   );
 };
