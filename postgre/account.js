@@ -20,15 +20,21 @@ async function addAccount(username, email, plainTextPassword) {
   }
   
   async function checkAccount(username) {
-    const result = await pgPool.query(sql.CHECK_ACCOUNT, [username]);
-    const user = result.rows[0];
+    try {
+      const result = await pgPool.query(sql.CHECK_ACCOUNT, [username]);
   
-    if (user) {
-      const hashedPassword = user.pw;
-      return { ...user, password: hashedPassword };
+      if (result.rows.length > 0) {
+        const user = result.rows[0];
+        const hashedPassword = user.pw;
+  
+        return { username: user.username, pw: hashedPassword };
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Error checking account:', error);
+      throw error;
     }
-  
-    return null;
   }
   
   module.exports = {

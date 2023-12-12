@@ -15,6 +15,7 @@ const SignUp = ({ signedIn, setSignedIn }) => {
   });
 
   useEffect(() => {
+    console.log('signedIn is:', signedIn);
     localStorage.setItem('signedIn', JSON.stringify(signedIn));
   }, [signedIn]);
 
@@ -36,7 +37,7 @@ const SignUp = ({ signedIn, setSignedIn }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch('http://localhost:3001/account/register', {
         method: 'POST',
@@ -45,13 +46,14 @@ const SignUp = ({ signedIn, setSignedIn }) => {
         },
         body: JSON.stringify(signupformData),
       });
-
+  
       if (response.ok) {
         // Sign up onnistui
         const data = await response.json();
         console.log('Sign Up successful:', data);
+  
+        // Update signedIn state
         setSignedIn(true);
-        console.log('signedIn is:', signedIn);
       } else {
         // Sign up error
         const errorData = await response.json();
@@ -93,6 +95,7 @@ const SignUp = ({ signedIn, setSignedIn }) => {
       console.error('Error during login:', error.message);
     }
   };
+
   // Ternarylla tarkistetaan onko käyttäjä kirjautunut sisään
   return (
     signedIn ? (

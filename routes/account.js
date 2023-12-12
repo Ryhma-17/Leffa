@@ -23,10 +23,10 @@ router.post('/register', upload.none(), async (req, res) => {
   const { username, email, password } = req.body;
 
   // Tarkistetaan onko käyttäjänimi olemassa
-const existingAccount = await checkAccount(username);
-if (existingAccount) {
-  return res.status(400).json({ error: 'Username already exists' });
-}
+  const existingAccount = await checkAccount(username);
+  if (existingAccount) {
+    return res.status(400).json({ error: 'Username already exists' });
+  }
 
   // Hashataan salasana bcryptillä
   console.log('Password: ', password);
@@ -47,22 +47,34 @@ router.post('/login', upload.none(), async (req, res) => {
 
   // Tarkistetaan onko käyttäjänimi olemassa
   const existingAccount = await checkAccount(username);
+  console.log('Existing Account:', existingAccount);
   if (!existingAccount) {
     return res.status(401).json({ message: 'Username not found' });
   }
 
   // Käytetään bcrypt.compare vertaamaan salasanoja
-  const correctPassword = await bcrypt.compare(password.trim(), existingAccount.password.trim());
+  const correctPassword = await bcrypt.compare(password.trim(), existingAccount.pw.trim());
+  console.log('Hashed Password:', existingAccount.pw.trim());
+  console.log('Entered Password:', password.trim());
+  console.log('Correct Password:', correctPassword);
+  if (correctPassword) {
+    console.log('Oikein');
+    // Jos molemmat käyttäjänimi ja salasana täsmäävät, luodaan JWT-token
+    const token = jwt.sign({ username: existingAccount.username }, 'your_secret_key', { expiresIn: '1h' });
+    console.log(username, existingAccount.username);
 
-  if (!correctPassword) {
+    // Lähetetään tokeni clientille
+    res.status(200).json({ message: 'Login successful', token });
+
+  } else {
+
+    console.log('Väärin');
     return res.status(401).json({ error: 'Password is incorrect' });
+    
+  
   }
 
-  // Jos molemmat käyttäjänimi ja salasana täsmäävät, luodaan JWT-token
-  const token = jwt.sign({ username: existingAccount.username }, 'your_secret_key', { expiresIn: '1h' });
 
-  // Lähetetään tokeni clientille
-  res.status(200).json({ message: 'Login successful', token });
 });
 
 
