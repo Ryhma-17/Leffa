@@ -12,6 +12,48 @@ const MyPage = ({ signedIn, setSignedIn }) => {
     const [hoveredMovieId, setHoveredMovieId] = useState(null); // Hiiren päällä olevan elokuvan id
 
 
+    const generateShareableLink = () => {
+        // Tehdään ja kopioidaan clipboardille linkki, joka sisältää valitut elokuvat, kustomoidun otsikon ja taustavärin
+        const shareableLink = `${window.location.origin}/share?movies=${encodeURIComponent(JSON.stringify(selectedMovies))}&title=${encodeURIComponent(customTitle)}&backgroundColor=${encodeURIComponent(customBackgroundColor)}`;
+        console.log("Shareable Link:", shareableLink);
+        navigator.clipboard.writeText(shareableLink)
+            .then(() => {
+                console.log('Link copied to clipboard:', shareableLink);
+                
+            })
+            .catch((err) => {
+                console.error('Unable to copy to clipboard:', err);
+                
+            });
+    };
+
+    const urlRenderi = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const moviesParam = urlParams.get('movies');
+        const titleParam = urlParams.get('title');
+        const backgroundColorParam = urlParams.get('backgroundColor');
+      
+        try {
+          // Parsitaan urli parametrit
+          const parsedMovies = moviesParam ? JSON.parse(decodeURIComponent(moviesParam)) : [];
+          const parsedTitle = titleParam ? decodeURIComponent(titleParam) : '';
+          const parsedBackgroundColor = backgroundColorParam ? decodeURIComponent(backgroundColorParam) : '';
+      
+          // Asetetaan parametrien mukaset arvot
+          setSelectedMovies(parsedMovies);
+          setCustomTitle(parsedTitle);
+          setCustomBackgroundColor(parsedBackgroundColor);
+        } catch (error) {
+          console.error('Error applying configuration from URL:', error);
+          // errori
+        }
+      };
+      
+      useEffect(() => {
+        // Komponentin latautuessa useffect suoritetaan
+        urlRenderi();
+      }, []);
+
     const openMovieSelector = () => {
         setMovieSelectorOpen(true);
     };
@@ -52,7 +94,7 @@ const MyPage = ({ signedIn, setSignedIn }) => {
         const storedTitle = localStorage.getItem('customTitle');
         const storedBackgroundColor = localStorage.getItem('customBackgroundColor');
         const storedMovies = localStorage.getItem('selectedMovies');
-        
+
 
         // Asetetaan kustomoidut asetukset, jos ne ovat olemassa
         if (storedTitle) setCustomTitle(storedTitle);
@@ -77,77 +119,78 @@ const MyPage = ({ signedIn, setSignedIn }) => {
         // Tallennetaan valitut elokuvat ja kirjautumistila paikalliseen tallennukseen
         localStorage.setItem('selectedMovies', JSON.stringify(selectedMovies));
         localStorage.setItem('signedIn', JSON.stringify(signedIn));
-      }, [selectedMovies, signedIn]);
-      
-  
+    }, [selectedMovies, signedIn]);
+
+
 
 
     // JSX
     return (
         signedIn ? (
-          <div style={{ backgroundColor: customBackgroundColor, padding: '20px', borderRadius: '8px', fontFamily: 'Arial, sans-serif' }}>
-            <h1 style={{ marginBottom: '20px', color: '#333', borderBottom: '2px solid #333', paddingBottom: '10px', fontFamily: 'Dosis' }}>My Page</h1>
-            <input type="color" value={customBackgroundColor} onChange={handleBackgroundColorChange} />
-    
-            {/* Customizable Content */}
-            <h2 style={{ marginTop: '20px', color: '#333', fontFamily: 'Dosis' }}>My Showcase</h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
-              {selectedMovies.map((movie) => (
-                <div
-                  key={movie.id}
-                  style={{
-                    textAlign: 'center',
-                    position: 'relative',
-                    cursor: 'pointer',
-                    marginBottom: '20px',
-                    maxWidth: '200px',
-                  }}
-                  onMouseEnter={() => handleHover(movie.id)}
-                  onMouseLeave={handleLeave}
-                >
-                  <img
-                    src={movie.images.mediumPortrait}
-                    alt={`Poster for the movie ${movie.title}`}
-                    style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s ease-in-out' }}
-                  />
-                  <p style={{ marginTop: '10px', fontSize: '16px', color: '#333' }}>{movie.title}</p>
-                  {hoveredMovieId === movie.id && (
-                    <button
-                      style={{
-                        backgroundColor: 'red',
-                        color: '#fff',
-                        padding: '8px 12px',
-                        border: 'none',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        fontSize: '14px',
-                      }}
-                      onClick={() => handleRemoveMovie(movie.id)}
-                    >
-                      Delete
-                    </button>
-                  )}
+            <div style={{ backgroundColor: customBackgroundColor, padding: '20px', borderRadius: '8px', fontFamily: 'Arial, sans-serif' }}>
+                <h1 style={{ marginBottom: '20px', color: '#333', borderBottom: '2px solid #333', paddingBottom: '10px', fontFamily: 'Dosis' }}>My Page</h1>
+                <input type="color" value={customBackgroundColor} onChange={handleBackgroundColorChange} />
+
+                {/* Customizable Content */}
+                <h2 style={{ marginTop: '20px', color: '#333', fontFamily: 'Dosis' }}>My Showcase</h2>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
+                    {selectedMovies.map((movie) => (
+                        <div
+                            key={movie.id}
+                            style={{
+                                textAlign: 'center',
+                                position: 'relative',
+                                cursor: 'pointer',
+                                marginBottom: '20px',
+                                maxWidth: '200px',
+                            }}
+                            onMouseEnter={() => handleHover(movie.id)}
+                            onMouseLeave={handleLeave}
+                        >
+                            <img
+                                src={movie.images.mediumPortrait}
+                                alt={`Poster for the movie ${movie.title}`}
+                                style={{ width: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', transition: 'transform 0.3s ease-in-out' }}
+                            />
+                            <p style={{ marginTop: '10px', fontSize: '16px', color: '#333' }}>{movie.title}</p>
+                            {hoveredMovieId === movie.id && (
+                                <button
+                                    style={{
+                                        backgroundColor: 'red',
+                                        color: '#fff',
+                                        padding: '8px 12px',
+                                        border: 'none',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                        fontSize: '14px',
+                                    }}
+                                    onClick={() => handleRemoveMovie(movie.id)}
+                                >
+                                    Delete
+                                </button>
+                            )}
+                        </div>
+                    ))}
                 </div>
-              ))}
+                <hr style={{ border: '1px solid #333', margin: '20px 0' }} />
+                <button style={{ backgroundColor: '#007bff', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px' }} onClick={openMovieSelector}>Select Movies</button>
+                <Modal
+                    isOpen={isMovieSelectorOpen}
+                    onRequestClose={closeMovieSelector}
+                    contentLabel="Movie Selector"
+                >
+                    <MovieList onMovieSelect={handleMovieSelect} />
+                    <button style={{ backgroundColor: '#333', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px', marginTop: '10px' }} onClick={closeMovieSelector}>Close</button>
+                </Modal>
+                <button style={{ backgroundColor: '#333', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px', marginLeft: '10px' }} onClick={generateShareableLink}>Share</button>
             </div>
-            <hr style={{ border: '1px solid #333', margin: '20px 0' }} />
-            <button style={{ backgroundColor: '#007bff', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px' }} onClick={openMovieSelector}>Select Movies</button>
-            <Modal
-              isOpen={isMovieSelectorOpen}
-              onRequestClose={closeMovieSelector}
-              contentLabel="Movie Selector"
-            >
-              <MovieList onMovieSelect={handleMovieSelect} />
-              <button style={{ backgroundColor: '#333', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px', marginTop: '10px' }} onClick={closeMovieSelector}>Close</button>
-            </Modal>
-          </div>
         ) : (
-          <div className="login-container" style={{ textAlign: 'center', fontFamily: 'Arial, sans-serif' }}>
-            <h1 style={{ color: '#333', marginBottom: '20px', fontFamily: 'Dosis' }}>Sign in to customize MyPage</h1>
-            {/* Add your login form or any other content here */}
-          </div>
+            <div className="login-container" style={{ textAlign: 'center', fontFamily: 'Arial, sans-serif' }}>
+                <h1 style={{ color: '#333', marginBottom: '20px', fontFamily: 'Dosis' }}>Sign in to customize MyPage</h1>
+                {/* Add your login form or any other content here */}
+            </div>
         )
-      );
-    };
+    );
+};
 
 export default MyPage;
