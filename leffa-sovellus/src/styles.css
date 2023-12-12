@@ -1,5 +1,6 @@
 .header {
   color: #fff;
+  font-family: 'Dosis', sans-serif;
 } 
 
 
@@ -26,6 +27,12 @@
     font-weight: bold; 
     font-size: 16px; 
   }
+  .navbar a:hover {
+    color: #ccc; 
+  }
+  .nav-item {
+    font-family: 'Dosis', sans-serif;
+  }
 
   .signup-container {
     background-image: url('./../assets/background.PNG');
@@ -38,9 +45,35 @@
   }
   
   .signup-form-container {
-    background-color: rgba(14, 13, 13, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
     padding: 20px;
     border-radius: 8px;
+    font-family: 'Dosis', sans-serif;
+    font-weight: 100;
+    text-align: center;
+  }
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  .signup-form input {
+    padding: 8px;
+    margin-bottom: 15px;
+  }
+  
+  .signup-form button {
+    padding: 10px;
+    background-color: #e41a1a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .signup-form button:hover {
+    background-color: #9e3333;
   }
 
   label {
@@ -59,6 +92,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-family: 'Dosis', sans-serif;
   }
   
   button:hover {
@@ -99,3 +133,7 @@
     padding: 10px;
   }
   
+  .custom-font {
+  font-family: 'Dosis', sans-serif;
+  /* Other styles... */
+}

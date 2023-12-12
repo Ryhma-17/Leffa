@@ -9,7 +9,7 @@ import './styles.css';
 import MyPage from './components/MyPage';
 
 const Welcome = () => {
-  return <p>Leffa</p>;
+  return <p></p>;
 };
 
 const App = () => {
