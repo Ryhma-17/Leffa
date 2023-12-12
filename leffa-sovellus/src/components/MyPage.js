@@ -185,7 +185,7 @@ const MyPage = ({ signedIn, setSignedIn }) => {
                 <button style={{ backgroundColor: '#333', color: '#fff', padding: '10px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px', marginLeft: '10px' }} onClick={generateShareableLink}>Share</button>
             </div>
         ) : (
-            <div className="login-container" style={{ textAlign: 'center', fontFamily: 'Arial, sans-serif' }}>
+            <div className="MyPage" style={{ textAlign: 'center', fontFamily: 'Arial, sans-serif' }}>
                 <h1 style={{ color: '#333', marginBottom: '20px', fontFamily: 'Dosis' }}>Sign in to customize MyPage</h1>
                 {/* Add your login form or any other content here */}
             </div>

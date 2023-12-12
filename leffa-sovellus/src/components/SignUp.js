@@ -100,6 +100,7 @@ const SignUp = ({ signedIn, setSignedIn }) => {
   return (
     signedIn ? (
       <div className="login-container">
+        <div className="login-form">
         <form>
           <label>
             Username:
@@ -129,6 +130,7 @@ const SignUp = ({ signedIn, setSignedIn }) => {
             Dont have an account?
           </button>
         </form>
+        </div>
       </div>
     ) : (
       <div className="signup-container">
@@ -163,7 +165,11 @@ const SignUp = ({ signedIn, setSignedIn }) => {
               />
             </label>
             <button type="submit">Sign Up</button>
+            <button type="button" onClick={() => setSignedIn(true)}>
+            Already have an account?
+          </button>
           </form>
+          
         </div>
       </div>
     )
