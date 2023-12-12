@@ -75,7 +75,37 @@
   .signup-form button:hover {
     background-color: #9e3333;
   }
-
+  .login-container {
+    background-image: url('./../assets/background.PNG');
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  .login-form {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    gap: 10px;
+    font-family: 'Dosis', sans-serif;
+    font-weight: 100;
+    text-align: center;
+    justify-content: center;
+  }
+  .login-form button {
+    padding: 10px;
+    background-color: #e41a1a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .login-form button:hover {
+    background-color: #9e3333;
+  }
+ 
   label {
     margin-bottom: 8px;
   }
