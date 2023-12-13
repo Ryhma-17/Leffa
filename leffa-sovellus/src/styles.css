@@ -1,5 +1,6 @@
 .header {
   color: #fff;
+  font-family: 'Dosis', sans-serif;
 } 
 
 
@@ -26,6 +27,12 @@
     font-weight: bold; 
     font-size: 16px; 
   }
+  .navbar a:hover {
+    color: #ccc; 
+  }
+  .nav-item {
+    font-family: 'Dosis', sans-serif;
+  }
 
   .signup-container {
     background-image: url('./../assets/background.PNG');
@@ -38,11 +45,67 @@
   }
   
   .signup-form-container {
-    background-color: rgba(14, 13, 13, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
     padding: 20px;
     border-radius: 8px;
+    font-family: 'Dosis', sans-serif;
+    font-weight: 100;
+    text-align: center;
   }
-
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  .signup-form input {
+    padding: 8px;
+    margin-bottom: 15px;
+  }
+  
+  .signup-form button {
+    padding: 10px;
+    background-color: #e41a1a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .signup-form button:hover {
+    background-color: #9e3333;
+  }
+  .login-container {
+    background-image: url('./../assets/background.PNG');
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  .login-form {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    gap: 10px;
+    font-family: 'Dosis', sans-serif;
+    font-weight: 100;
+    text-align: center;
+    justify-content: center;
+  }
+  .login-form button {
+    padding: 10px;
+    background-color: #e41a1a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .login-form button:hover {
+    background-color: #9e3333;
+  }
+ 
   label {
     margin-bottom: 8px;
   }
@@ -59,6 +122,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-family: 'Dosis', sans-serif;
   }
   
   button:hover {
@@ -99,16 +163,20 @@
     padding: 10px;
   }
   
-  .news-container {
-    display: flex;
-    flex-wrap: wrap;
-  }
+  .custom-font {
+  font-family: 'Dosis', sans-serif;
+  /* Other styles... */
+}
   
-  .news-item {
-    flex: 0 0 calc(50% - 10px);
-    margin: 5px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-  }
-  
+.news-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.news-item {
+  flex: 0 0 calc(50% - 10px);
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
