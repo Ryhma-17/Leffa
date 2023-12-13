@@ -5,14 +5,14 @@ const upload = multer({ dest: 'upload/' });
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { addAccount, getAccounts, checkAccount } = require('../postgre/account');
+const { addAccount, getAccount, checkAccount } = require('../postgre/account');
 
 /**
  * Account root get mapping
  */
 router.get('/', async (req, res) => {
   try {
-    res.json(await getAccounts());
+    res.json(await getAccount());
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -28,13 +28,10 @@ router.post('/register', upload.none(), async (req, res) => {
     return res.status(400).json({ error: 'Username already exists' });
   }
 
-  // Hashataan salasana bcryptillä
-  console.log('Password: ', password);
-  const hashedPassword = await bcrypt.hash(password, 10);
 
   // Lisätään uusi käyttäjä tietokantaan
   try {
-    await addAccount(username, email, hashedPassword);
+    await addAccount(username, email, password);
     res.status(201).json({ message: 'Account created successfully' });
   } catch (error) {
     console.error(error);
@@ -47,35 +44,29 @@ router.post('/login', upload.none(), async (req, res) => {
 
   // Tarkistetaan onko käyttäjänimi olemassa
   const existingAccount = await checkAccount(username);
-  console.log('Existing Account:', existingAccount);
   if (!existingAccount) {
     return res.status(401).json({ message: 'Username not found' });
   }
 
   // Käytetään bcrypt.compare vertaamaan salasanoja
-  const correctPassword = await bcrypt.compare(password.trim(), existingAccount.pw.trim());
-  console.log('Hashed Password:', existingAccount.pw.trim());
-  console.log('Entered Password:', password.trim());
-  console.log('Correct Password:', correctPassword);
-  if (correctPassword) {
-    console.log('Oikein');
-    // Jos molemmat käyttäjänimi ja salasana täsmäävät, luodaan JWT-token
-    const token = jwt.sign({ username: existingAccount.username }, 'your_secret_key', { expiresIn: '1h' });
-    console.log(username, existingAccount.username);
+  bcrypt.compare(password, existingAccount.pw, (err, result) => {
+    if (err) {
+      console.log('Väärin');
+      console.error(err);
+      return res.status(500).json({ error: err.message });
+    } else if (result) {
+      console.log('Oikein');
 
-    // Lähetetään tokeni clientille
-    res.status(200).json({ message: 'Login successful', token });
+      // Jos molemmat käyttäjänimi ja salasana täsmäävät, luodaan JWT-token
+      const token = jwt.sign({ username: existingAccount.username }, 'your_secret_key', { expiresIn: '1h' });
 
-  } else {
+      // Lähetetään tokeni clientille
+      res.status(200).json({ message: 'Login successful', token });
+    }
+  });
+}
+);
 
-    console.log('Väärin');
-    return res.status(401).json({ error: 'Password is incorrect' });
-    
-  
-  }
-
-
-});
 
 
 

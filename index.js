@@ -54,3 +54,5 @@ app.post('/user', (req,res) => {
     console.log(req.body);
     res.send('Post working');
 });
+
+module.exports = app;

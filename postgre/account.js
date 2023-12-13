@@ -13,9 +13,9 @@ async function getAccount() {
     console.log(result.rows);
 }
 
-async function addAccount(username, email, plainTextPassword) {
+async function addAccount(username, email, password) {
     
-    const hashedPassword = await bcrypt.hash(plainTextPassword, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     await pgPool.query(sql.INSERT_ACCOUNT, [username, email, hashedPassword]);
   }
   

@@ -52,7 +52,7 @@ const SignUp = ({ signedIn, setSignedIn }) => {
         const data = await response.json();
         console.log('Sign Up successful:', data);
   
-        // Update signedIn state
+        // Updatetaan signedIn state
         setSignedIn(true);
       } else {
         // Sign up error
