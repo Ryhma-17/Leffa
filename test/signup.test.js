@@ -5,22 +5,36 @@ const app = require('./../index'); // Import your Express app
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-describe('User API', () => {
-    it('should register a new user', (done) => {
-        chai
-            .request(app)
-            .post('/account/register')
-            .send({
-                username: 'testuser',
-                email: 'testemail',
-                password: 'testpassword',
-            })
-            .end((err, res) => {
-                expect(res).to.have.status(201);
-                expect(res.body).to.have.property('message').equal('Account created successfully');
-                done();
-            });
-    });
+const randomUsername = generateRandomString(10);
+const randomEmail = generateRandomString(8) + '@example.com';
+const randomPassword = generateRandomString(12);
+
+// Funktio luomaan satunnaiset stringit, jotta testi luo aina uuden käyttäjän
+
+function generateRandomString(length) {
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
+
+it('should register a new user', (done) => {
+    chai
+        .request(app)
+        .post('/account/register')
+        .send({
+            username: randomUsername,
+            email: randomEmail,
+            password: randomPassword,
+        })
+        .end((err, res) => {
+            expect(res).to.have.status(201);
+            expect(res.body).to.have.property('message').equal('Account created successfully');
+            done();
+        });
+});
 
     it('should return a list of users', (done) => {
         chai
@@ -35,7 +49,6 @@ describe('User API', () => {
 
                 expect(res).to.have.status(200);
 
-                // Handle empty response separately
                 if (!res.text) {
                     console.log('Empty response');
                     done();
@@ -47,5 +60,5 @@ describe('User API', () => {
                 done();
             });
     });
-});
+
 
