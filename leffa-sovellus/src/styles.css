@@ -180,3 +180,23 @@
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
+
+.Groupscontainer {/* groups tyyli */ 
+  background-color: black;
+  color: white;
+  display: flex;
+  height: 100vh;
+  font-family: 'Dosis', sans-serif;
+  text-align: center;
+  justify-content: center;
+  
+}
+
+.Groupscontainer button {
+  background-color: #e41a1a; 
+  color: white; 
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
