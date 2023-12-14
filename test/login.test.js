@@ -13,9 +13,9 @@ describe('User API', () => {
             .request(app)
             .post('/account/login')
             .send({
-                username: 'testuser',
-                email: 'testemail',
-                password: 'testpassword',
+                username: 'testi',
+                email: 'testi@testi',
+                password: 'testi',
             })
             .end((err, res) => {
                 expect(res).to.have.status(200);
