@@ -53,4 +53,4 @@ module.exports = {
 
 // Example usage
 //addReview(11, 123, 'This is a review', 5); // Use the appropriate movie_id
-checkReview(11, 123); // Use the appropriate movie_id
+//checkReview(11, 123); // Use the appropriate movie_id

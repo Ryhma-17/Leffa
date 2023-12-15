@@ -79,9 +79,25 @@ const sql = {
     }
   }
   
+
+
   
+ const getMovie = async (movie_id) => {
+    try {
+      const result = await pgPool.query(sql.SELECT_MOVIE, [movie_id]);
+      return result.rows;
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+      throw error; // Rethrow the error if needed
+    }
+  }
   
+  module.exports = {
+    getMovie,
+  };
+  
+  // Example usage 
   
   
 
-insertMovies();
+//insertMovies();
