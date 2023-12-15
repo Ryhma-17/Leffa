@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import Stars from './reviews';
 import './../styles.css';
 
 const MovieList = ({ onMovieSelect }) => {
@@ -84,6 +85,7 @@ const MovieList = ({ onMovieSelect }) => {
             />
             <div className="movie-details">
               <strong>{movie.title}</strong>
+              <Stars iconCount={5} />
             </div>
           </div>
         ))}

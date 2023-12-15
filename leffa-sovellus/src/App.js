@@ -27,11 +27,11 @@ const App = () => {
         <Welcome />
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/movies" element={<Movies />} />
-          <Route path="/mypage" element={<MyPage signedIn={signedIn} setSignedIn={setSignedIn}/>} />
-          <Route path="/signup" element={<SignUp signedIn={signedIn} setSignedIn={setSignedIn} />} />
-          <Route path="/groups" element={<GroupPage signedIn={signedIn} setSignedIn={setSignedIn} />} />
+          <Route path="/C" element={<Home />} />
+          <Route path="/moviesC" element={<Movies />} />
+          <Route path="/mypageC" element={<MyPage signedIn={signedIn} setSignedIn={setSignedIn}/>} />
+          <Route path="/signupC" element={<SignUp signedIn={signedIn} setSignedIn={setSignedIn} />} />
+          <Route path="/groupsC" element={<GroupPage signedIn={signedIn} setSignedIn={setSignedIn} />} />
         </Routes>
       </div>
     </Router>
