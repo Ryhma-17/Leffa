@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Stars from './reviews';
 import './../styles.css';
+require('dotenv').config();
 
 const MovieList = ({ onMovieSelect }) => {
   const [movies, setMovies] = useState([]);
@@ -11,7 +12,7 @@ const MovieList = ({ onMovieSelect }) => {
 
   const fetchMovies = useCallback(async () => {
     try {
-      const apiKey = '2fec1e16d4aa6b56f3458f21d6bb19d1';
+      const apiKey = process.env.APIKEY;
       const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
         params: {
           api_key: apiKey,
