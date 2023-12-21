@@ -92,10 +92,10 @@ Ryhmässä ei ollut erillisiä rooleja, vaan sovimme tapaamisista yhdessä ja p�
 
  
 
-Sovellus: 
+**Sovellus:** 
 
 https://leffasovellus.onrender.com/ 
 
-Esittelyvideo: 
+**Esittelyvideo:**
 
 https://www.youtube.com/watch?v=TT6oZv4hscM 
